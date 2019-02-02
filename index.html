@@ -9,6 +9,7 @@
         </div>
         <button type="submit">Get Length!</button>
     </form>
+    <h1 id="result">something</h1>
     <script>
         //necessary for ipc communication
         const electron = require('electron');
@@ -22,6 +23,11 @@
             //send the info to the electron app
             ipcRenderer.send('video:submit', path);
         
+        });
+
+        ipcRenderer.on('video:fetch_metadata', (event, duration)=>{
+            debugger
+            document.querySelector('#result').innerHTML = `Video is ${duration} seconds long`;
         });
     </script>
 </body>

@@ -6,9 +6,12 @@ const ffmpeg = require('fluent-ffmpeg');
 // const {property1, property2,..} = libary;
 const {app, BrowserWindow, ipcMain}=electron;
 
+//define globally
+let mainWindow;
+
 app.on('ready', ()=>{
     // when the browser window object is created, basically a window is created. 
-    const mainWindow = new BrowserWindow({});
+    mainWindow = new BrowserWindow({fullscreen: true});
 
     //loads a valid URL into the specified window object
     mainWindow.loadFile('index.html') //from official guide
@@ -18,7 +21,9 @@ app.on('ready', ()=>{
 
 ipcMain.on('video:submit', (event, path)=>{
     ffmpeg.ffprobe(path, (err, metadata)=>{
-        console.log('Video duration is : ', metadata.format.duration);
+        //console.log('Video duration is : ', metadata.format.duration);
+        mainWindow.webContents.send('video:fetch_metadata', metadata.format.duration);
+        //debugger
     });
 });
 
